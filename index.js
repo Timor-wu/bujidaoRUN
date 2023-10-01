@@ -5,11 +5,12 @@ if (!fs.existsSync(Cfg.file))
   fs.mkdirSync(Cfg.file)
 
 let file = fs.readdirSync(`${Cfg.defile}`).filter(file => file.endsWith('.yaml'))
-for (let item of [...file, 'mys.json'])
+for (let item of file)
   if (!fs.existsSync(`${Cfg.file}/${item}`))
     fs.copyFileSync(`${Cfg.defile}/${item}`, `${Cfg.file}/${item}`)
 
 try {
+  let ischange = false
   for (let type of ['white', 'banuid', 'api', 'equip', 'command', 'lable', 'config']) {
     let isNew = true
     let data = Cfg.getConfig(type)
@@ -26,6 +27,7 @@ try {
             config = config.replace(new RegExp(`${i}:(.*)`, 'g'), `${i}: ${data[i]}`)
 
         Cfg.setConfig(type, config, false)
+        ischange = true
       }
     } else {
       for (let i in defdata)
@@ -37,10 +39,11 @@ try {
             defdata[i] = data[i]
 
         Cfg.setConfig(type, defdata)
+        ischange = true
       }
     }
   }
-  logger.mark('[寄]配置文件更新完成')
+  if (ischange) logger.mark('[寄]配置文件更新完成')
 } catch (error) {
   logger.error(error)
 }

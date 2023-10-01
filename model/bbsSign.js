@@ -14,7 +14,7 @@ export default class BBsSign extends base {
     constructor(e) {
         super(e)
         this.model = 'BBsSign'
-        this.ForumData = Data.readJSON(`${Cfg.file}`, "mys")
+        this.ForumData = Data.readJSON(`${Cfg.defile}`, "mys")
     }
 
     static async bbsSign(e, name) {
